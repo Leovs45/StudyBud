@@ -81,7 +81,7 @@ def home(request):
     #La búsqueda era así al principio, luego importó Q y pudimos afinar
     # rooms = Room.objects.filter(topic__name__icontains=q)
 
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
     context = {"rooms": rooms, 'topics': topics, 
@@ -228,3 +228,32 @@ def updateUser(request):
             return redirect('user-profile', pk=user.id)
     context = {"form": form}
     return render(request, 'base/update-user.html', context)
+
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Topic.objects.filter(name__icontains=q)
+    context = {"topics": topics}
+    return render(request, 'base/topics.html', context)
+
+# {{ topics.count }}
+# Este caso se usa cuando topics es un QuerySet, por ejemplo, si pasaste algo como:
+# topics = Topic.objects.all()
+# Entonces, en el template, {{ topics.count }} cuenta directamente los objetos en ese QuerySet, sin necesidad de acceder a relaciones.
+
+# Cuando accedes a {{ topic.room_set.all.count }}, lo que haces es:
+
+# Usar el related name automático (room_set) que Django crea para acceder a los Room que tienen ese Topic.
+# Llamar a .all() para obtener todos los objetos relacionados.
+# Aplicar .count() para contarlos.
+# Si hubieras definido un related_name en el modelo:
+# class Room(models.Model):
+#     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="rooms")
+# Entonces podrías escribir en el template:
+# {{ topic.rooms.count }}
+# y evitar el uso de room_set.
+
+def activityPage(request):
+    room_messages = Message.objects.all()
+    context = {'room_messages':room_messages}
+    return render(request, 'base/activity.html', context)
+
