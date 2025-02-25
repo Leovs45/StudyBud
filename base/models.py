@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 # Create your models here.
 # Los modelos se crean acá como clases.
@@ -44,3 +44,11 @@ class Message(models.Model):
 
     def __str__(self):
         return self.body[0:50]
+    
+class User(AbstractUser):
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True)
+    bio = models.TextField(null=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
