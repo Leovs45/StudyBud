@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views # Importa las vistas del archivo views.py
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     
@@ -24,3 +26,5 @@ urlpatterns = [
 #    -La parte <int:pk> indica que se espera un número entero como parámetro.
 #    -name='room' permite que las plantillas usen {% url 'room' room.id %} en lugar de escribir manualmente la URL.
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
