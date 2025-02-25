@@ -1,0 +1,43 @@
+<!DOCTYPE <!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h1>Cool Rooms</h1>
+
+        <div id="rooms-container"></div>
+        
+        <script src="" async defer></script>
+    </body>
+
+    <script>
+        let roomsContainer = document.getElementById('rooms-container')
+
+        let getRooms = async () => {
+            let response = await fetch('http://127.0.0.1:8000/api/rooms/')
+            let rooms = await response.json()
+            
+            for (let i=0; rooms.length > i; i++) {
+                let room = rooms[i]
+                let row = `<div>
+                                <h3>${room.name}</h3>
+                            </div>`
+
+                roomsContainer.innerHTML += row
+            }
+        }
+
+        getRooms()
+    </script>
+
+</html>
